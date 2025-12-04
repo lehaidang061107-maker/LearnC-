@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     "/Users/HaiDang/Documents/LearnCode/Chương 5/output/Bai1"
+relocations:     []
+...
