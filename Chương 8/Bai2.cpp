@@ -1,0 +1,184 @@
+/*Bài 2: Viết chương trình quản lý sản phẩm (tên, đơn giá, số lượng) gồm các chức năng sau:
+Xem danh sách sản phẩm
+Thêm sản phẩm mới
+Xóa sản phẩm*/
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Product
+{
+    string name;
+    int price;
+    int quantity;
+
+    friend istream& operator>>(istream &is, Product &product)
+    {
+        cout << "Nhap ten san pham: ";
+        is.ignore();
+        getline(is, product.name);
+        cout << "Nhap don gia san pham: ";
+        is >> product.price;
+        cout << "Nhap so luong san pham: ";
+        is >> product.quantity;
+
+        return is;
+    }
+
+    friend ostream& operator<<(ostream &os, Product Product)
+    {
+        os << "Ten san pham: " << Product.name << endl;
+        os << "Don gia san pham: " << Product.price << endl;
+        os << "So luong san pham: " << Product.quantity << endl;
+        
+        return os;
+    }
+};
+
+int show_menu();
+void print_products(Product *products, int size);
+void add_product(Product* &products, int &size);
+void delete_product(Product* &products, int &size);
+
+int main()
+{
+    int size = 0;
+    Product *products = new Product[size];
+    while(true)
+    {
+        int chose = show_menu();
+
+        system("clear");
+
+        switch(chose)
+        {
+            case 1:
+                print_products(products, size);
+                break;
+            case 2:
+                add_product(products, size);
+                break;
+            case 3:
+                delete_product(products, size);
+                break;
+            case 0:
+                cout << "Tam biet!" << endl;
+
+                return 0;
+
+            default:
+                cout << "Lua chon khong hop le!" << endl;    
+        }
+
+        cout << " Ban co muon tiep tuc khong (1/0): ";
+        bool is_continue;
+        cin >> is_continue;
+
+        if(is_continue)
+        {
+            
+        }
+
+        if(!is_continue)
+        {
+            cout << "Tam biet!" << endl;
+            break;
+        }
+    }
+    return 0;
+}
+
+int show_menu()
+{
+    system("clear");
+    int chose;
+    cout << "------------MENU------------" << endl;
+    cout << "1.Xem danh sach san pham" << endl;
+    cout << "2.Them san pham moi" << endl;
+    cout << "3.Xoa san pham" << endl;
+    cout << "0.Thoat chuong trinh" << endl;
+
+    cout << "Nhap lua chon cua ban: ";
+    cin >> chose;
+
+    return chose;
+}
+
+void print_products(Product *products, int size)
+{
+    if (!size)
+    {
+        cout << "Chua co san pham nao." << endl;
+    }
+    else
+    {
+        cout << "Danh sach san pham: " << endl;
+        for (int i = 0; i < size; i++)
+        {
+            cout << products[i] << endl;
+        }
+    }
+}
+
+void add_product(Product* &products, int &size)
+{
+    Product new_product;
+    cout << "Nhap thong tin san pham moi: " << endl;
+    cin >> new_product;
+    
+    int new_size = size + 1;
+    Product *tmp_products = new Product[new_size];
+
+    for(int i = 0; i < size; i++)
+    {
+        tmp_products[i] = products[i];
+    }
+    tmp_products[new_size -1] = new_product;
+
+    delete[] products;
+    products = tmp_products;
+    size = new_size;
+    cout << "Da them san pham moi thanh cong!" << endl;
+}
+
+void delete_product(Product* &products, int &size)
+{
+    cout << "Nhap ten san pham can xoa: ";1
+    string deleted_name;
+    cin.ignore();
+    getline(cin, deleted_name);
+
+    int deleted_index = -1;
+    for(int i = 0; i < size; i++)
+    {
+        if(!deleted_name.compare(products[i].name))
+        {
+            deleted_index = i;
+            break;
+
+        }
+    }
+
+    if(deleted_index == -1)
+    {
+        cout << "Khong tim thay san pham can xoa!" << endl;
+        return;
+    }
+
+    for(int i = deleted_index; i < size -1;i++)
+    {
+        products[i] = products[i + 1];
+    }
+    size--;
+
+    Product* tmp_products = new Product[size];
+    for ( int i = 0 ;i < size; i++)
+    {
+        tmp_products[i] = products[i];
+    }
+
+    delete[] products;
+    products = tmp_products;
+
+    cout << "Da xoa san pham thanh cong!" << endl;
+}
